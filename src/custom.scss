@@ -1,0 +1,31 @@
+// Override default variables before the import
+
+$theme-colors: (
+    "primary":#24292e,
+    "secondary":#868e96,
+    "success":#28a745,
+    "danger":#dc3545,
+    "warning":#ffc107,
+    "info":#17a2b8,
+    "light":#cfcfcf,
+    "dark":#191919,
+    "muted":#6c757d,
+    "white":#fff    
+);
+
+/*
+$enable-grid-classes:false;
+$primary:#521aea;
+$secondary:#868e96;
+$success:#28a745;
+$danger:#dc3545;
+$info:#17a2b8;
+$warning:#ffc107;
+$light:#f8f9fa;
+$dark:#343434;
+$spacer:1rem;
+$border-width:1px;
+$btn-border-radius:.25rem;
+*/
+// Import Bootstrap and its default variables
+@import '~bootstrap/scss/bootstrap.scss';

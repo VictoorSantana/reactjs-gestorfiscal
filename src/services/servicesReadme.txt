@@ -1,0 +1,1 @@
+Essa pasta (components) servirá para colocar providers de chamadas à api.

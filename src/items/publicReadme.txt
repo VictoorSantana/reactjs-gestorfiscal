@@ -1,0 +1,1 @@
+Essa pasta (items) servirá para colocar arquivos publicos, que irá aparecer na página.
