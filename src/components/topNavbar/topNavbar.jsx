@@ -29,9 +29,9 @@ class topNavbar extends Component {
     }
 
     componentDidMount = async () => {  
-        console.log(this.props.user);
+        //console.log(this.props.user);
         if(FormFast.estaVazio(this.props.user)) {
-            console.log('TOP NAVBAR componentDidMount');
+            //console.log('TOP NAVBAR componentDidMount');
             const acesso = await ServiceLogin.whoami();
             this.props.onUpdateUser(acesso);             
         }              
