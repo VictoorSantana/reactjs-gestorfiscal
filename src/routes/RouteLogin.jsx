@@ -80,7 +80,7 @@ class RouteLogin extends Component {
 
     render() {
         return (
-          <div className="py-5">
+          <div className="lay-painel py-5 bg-dark">
 
           <div className="m-auto d-block bg-white shadow rounded p-3 border-primary slide-in-fwd-top" style={{width: "350px", borderTop: "1rem solid"}}>
             <h4 className="text-center m-0"> Bem Vindo ! </h4>

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import userReducer from './reducers/userReducer';
 import alertaReducer from './reducers/alertaReducer';
 
-import './custom.scss';
+import './temas/index';
 import './items/customStyle.css';
 import './items/animista.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';

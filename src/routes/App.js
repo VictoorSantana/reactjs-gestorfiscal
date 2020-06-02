@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 /* Rotas */
 import RouteLogin from './RouteLogin';
 import RouteUser from './RouteUser'
+import RouteConfiguracao from './RouteConfiguracao';
 
 /*****/
 
@@ -30,7 +31,8 @@ const Routes = () => (
   <BrowserRouter>
         <Switch>
             <Route exact path="/" component={(props) => <RouteLogin  {...props}></RouteLogin>}></Route>
-            <PrivateRoute path="/user" component={(props) => <RouteUser {...props}></RouteUser>}></PrivateRoute>    
+            <PrivateRoute path="/user" component={(props) => <RouteUser {...props}></RouteUser>}></PrivateRoute>
+            <PrivateRoute path="/configuracoes" component={(props) => <RouteConfiguracao {...props}></RouteConfiguracao>}></PrivateRoute>
         </Switch>
   </BrowserRouter>
 );

@@ -23,7 +23,8 @@ export default {
                     titulo: 'Perfil',
                     subItem: [
                         {id: 4, titulo: 'Escalações', link: '/test'},
-                        {id: 5, titulo: 'Gerencias', link: '/test'}
+                        {id: 5, titulo: 'Gerencias', link: '/test'},
+                        {id: 6, titulo: 'Usuário', link: '/user'}
                     ]
                 }
             ]        

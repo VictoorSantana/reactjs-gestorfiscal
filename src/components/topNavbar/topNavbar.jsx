@@ -71,7 +71,7 @@ class topNavbar extends Component {
                         <div className="d-flex justify-content-between">
                             <div className="d-flex align-items-end">
                                 <button type="button" className="btn btn-primary" onClick={(e) => this.handleMenuBar(true)}> <i className="fas fa-bars"></i> </button>
-                                <h4 className="ml-3 h5 text-white"> Usuário </h4>
+                                <h4 className="ml-3 h5 text-white"> { this.props.titulo } </h4>
                             </div>                            
 
                             <div className="m-0">
@@ -82,9 +82,9 @@ class topNavbar extends Component {
                             variant="primary"
                             style={{zIndex: 3}}
                             title={<i className="fas fa-cogs"></i>}
-                            >
-                                <Dropdown.Item eventKey="2">Configurações</Dropdown.Item>
-                                <Dropdown.Item eventKey="3">Perfil</Dropdown.Item>
+                            >                                
+                                <Dropdown.Item eventKey="2" tag="a" href="/configuracoes">Configurações</Dropdown.Item>                                
+                                <Dropdown.Item eventKey="3">Perfil</Dropdown.Item>                                
                                 <Dropdown.Divider />
                                 <Dropdown.Item eventKey="4" onClick={this.handleLogOut}>Sair</Dropdown.Item>
                             </DropdownButton>
@@ -94,7 +94,7 @@ class topNavbar extends Component {
                     </div>
                 </div>
 
-                <div className={`lay-menu ${ !this.state.menubar ? ('lay-menu-off'): ('') } p-1 bg-dark shadow`}>
+                <div className={`lay-menu ${ !this.state.menubar ? ('lay-menu-off'): ('') } p-1 bg-dark lay-shadow2`}>
 
                     {
                         this.props.user == undefined ? (
@@ -137,26 +137,27 @@ class topNavbar extends Component {
                             </div>
                         )
                     }
-                    </div>
+                    </div>             
+                </div>
 
-                    
-                    <div className="lay-log overflow-hidden">
-                        {
-                            this.props.alerta !== undefined ? (
-                                this.props.alerta.map((item) =>
-                                <div key={item.id} className={`alert alert-${item.tipo} alert-dismissible fade show slide-in-right`} role="alert">
-                                    <strong>{item.destaque}</strong> {item.msg}
-                                    <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={(e) => this.props.onRemoveAlerta(item)}>
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
+                <div className="lay-log overflow-hidden">
+                    {
+                        this.props.alerta !== undefined ? (
+                            this.props.alerta.map((item) =>
+                            <div key={item.id} className={`alert alert-${item.tipo} alert-dismissible fade show shadow slide-in-right`} role="alert">
+                                <strong>{item.destaque}</strong> {item.msg}
+                                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={(e) => this.props.onRemoveAlerta(item)}>
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
 
-                            )
-                            ) : ('')
-                            
-                        }                        
-                    </div>
-
+                        )
+                        ) : ('')
+                        
+                    }                        
+                </div>  
+                <div style={{paddingTop: "64px"}}>
+                    {this.props.children}
                 </div>
             </React.Fragment>
         );

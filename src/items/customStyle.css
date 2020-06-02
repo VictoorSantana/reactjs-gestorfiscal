@@ -1,17 +1,19 @@
 
-.lay-body {
+
+  .lay-painel {
     width: 100%;
     min-height: 100vh;
-    
-    background-color: #434343;
-    background-image: linear-gradient(to bottom right, #434343, #72331d);
-
   }
   
   .lay-shadow {
     -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.4);
     -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.4);
     box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.4);
+  }
+  .lay-shadow2 {
+    -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
   }
   .lay-menu {
     position: fixed;
@@ -43,7 +45,10 @@
   }
   .lay-log {
     position: fixed;
-    right: 20px;
+    width: 350px;
+    right: 0;
+    left: 0;
+    margin: auto;
     top: 77px;
     z-index: 1;
     max-height: 80vh;

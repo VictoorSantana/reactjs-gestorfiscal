@@ -1,0 +1,23 @@
+// Override default variables before the import
+/*! `Custom` Bootstrap 4 theme */
+@import url(https://fonts.googleapis.com/css?family=Muli:200,300,400,700);
+$font-family-base:Muli;
+@import url(https://fonts.googleapis.com/css?family=Oswald:200,300,400,700);
+$headings-font-family:Oswald;
+
+//$enable-grid-classes:true;
+$primary:#ffa238;
+$secondary:#88939c;
+$success:#3e5945;
+$danger:#cc330d;
+$info:#5c8f94;
+$warning:#6e9fa5;
+$light:#eceeec;
+$dark:#1e2b37;
+$body-bg: #f1f1f1; 
+$enable-gradients:false;
+$spacer:1rem;
+$border-width:1px;
+$btn-border-radius:.25rem;
+
+@import '~bootstrap/scss/bootstrap.scss';
