@@ -7,8 +7,7 @@ export default {
 
 
     postLogin: async (data) => {
-
-        console.log(API_URL_BASE + '/auth/login');
+        
         return axios.post(API_URL_BASE + '/auth/login', data)
         .then(res => {          
           return res;

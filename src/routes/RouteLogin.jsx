@@ -9,6 +9,9 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import { LOCAL_STORAGE_VAR } from '../helpers/globalvar';
+
+import schemaCredenciais from '../schemas/schemaCredenciais';
+
 class RouteLogin extends Component {
 
 
@@ -40,51 +43,60 @@ class RouteLogin extends Component {
     handleSubmit= async e => {
         e.preventDefault();
 
-        const data = FormFast.getObject(e.target);
-        
         this.setState({ travar: true });
 
-        const result = await ServiceLogin.postLogin(data);
-                
-        switch(result.status) {
-          case 401: //Senha errada
-            this.setState({ travar: false });
-            this.setState({alerta: {    
-              ativo: true,      
-              tipo: 'warning', //warning, danger
-              msg: result.data.message,
-              destacado: 'Barbaridade!'
-            }});
-            break;
-          case 200:   
-            console.log(result.data);         
-            localStorage.setItem(LOCAL_STORAGE_VAR, result.data.access_token);
-            this.onUpdateUser(result.data.user);                    
-            this.props.history.push('/user');
-            break;
-
-          default:
-            this.setState({alerta: {    
-              ativo: true,      
-              tipo: 'danger', //warning, danger
-              msg: 'Parece que o servidor está indisponível. Atualize a página e tente novamente.',
-              destacado: 'Meu Deus!'
-            }});
-            break;
-        } 
+        const data = FormFast.getObject(e.target);      
         
+        schemaCredenciais.isValid(data)
+        .then( async valid => {
+            if(valid) {
+              const result = await ServiceLogin.postLogin(data);
                 
+                switch(result.status) {
+                  case 401: //Senha errada
+                    this.setState({ travar: false });
+                    this.setState({alerta: {    
+                      ativo: true,      
+                      tipo: 'warning', //warning, danger
+                      msg: result.data.message,
+                      destacado: 'Barbaridade!'
+                    }});
+                    break;
+                  case 200:              
+                    localStorage.setItem(LOCAL_STORAGE_VAR, result.data.access_token);
+                    this.onUpdateUser(result.data.user);                    
+                    this.props.history.push('/user');
+                    break;
+
+                  default:
+                    this.setState({alerta: {    
+                      ativo: true,      
+                      tipo: 'danger', //warning, danger
+                      msg: 'Parece que o servidor está indisponível. Atualize a página e tente novamente.',
+                      destacado: 'Meu Deus!'
+                    }});
+                    break;
+                } 
+            } else {
+              this.setState({alerta: {    
+                ativo: true,      
+                tipo: 'danger', //warning, danger
+                msg: 'Todos os campos abaixo devem ser preenchidos e válidos. Tente novamente.',
+                destacado: 'Atenção usuário!'
+              }});
+              this.setState({ travar: false });
+              
+            }           
+        });                                
     }
-
-
 
     render() {
         return (
           <div className="lay-painel py-5 bg-dark">
 
-          <div className="m-auto d-block bg-white shadow rounded p-3 border-primary slide-in-fwd-top" style={{width: "350px", borderTop: "1rem solid"}}>
-            <h4 className="text-center m-0"> Bem Vindo ! </h4>
-            <p className="text-center text-muted mb-5"> Faça login </p>
+          <div className="m-auto d-block bg-white lay-shadow2 rounded p-3 border-primary bounce-in-top" style={{width: "350px", borderTop: "1rem solid"}}>
+            <h4 className="text-center m-0"> Bem-Vindo ! </h4>
+            <p className="text-center text-muted mb-5"> Faça seu login para continuar. </p>
             
             {
               this.state.travar ? (
@@ -92,13 +104,26 @@ class RouteLogin extends Component {
               ): (
                 <form onSubmit={this.handleSubmit}>
                   <div className="form-group">
-                    <input type="text" name="email" required className="form-control" placeholder="Email" disabled={this.state.travar ? ("true"): ""}></input>
+                    <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text"> <i className="fas fa-at"></i> </div>
+                        </div>
+                        <input type="text" name="email" required className="form-control" placeholder="Email" disabled={this.state.travar ? ("true"): ""}></input>
+                    </div>                    
                   </div>
                   <div className="form-group">
-                    <input type="password" name="password" required className="form-control" placeholder="Senha" disabled={this.state.travar ? ("true"): ""}></input>
+                      <div className="input-group mb-2">
+                        <div className="input-group-prepend">
+                          <div className="input-group-text"> <i className="fas fa-key"></i> </div>
+                        </div>
+                        <input type="password" name="password" required className="form-control" placeholder="Senha" disabled={this.state.travar ? ("true"): ""}></input>
+                      </div>                    
                   </div>
                   <div className="form-group mb-1">
                     <button type="submit" className="btn btn-primary btn-block" disabled={this.state.travar ? ("true"): ""}>Entrar</button>
+                  </div>
+                  <div className="form-group mb-0 d-none">
+                      <p className="btn btn-link p-0 mb-0">Esqueci a senha...</p>
                   </div>
                 </form>
               )

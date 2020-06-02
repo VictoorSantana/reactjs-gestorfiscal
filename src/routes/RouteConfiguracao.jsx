@@ -31,7 +31,7 @@ class RouteConfiguracao extends Component {
                             <div className="d-flex justify-content-start">
                                 <div className="form-group">
                                     <label htmlFor="tema" className="d-block">Tema</label>
-                                    <select name="tema" className="form-control" disabled="true" value={this.state.tema} onChange={(e) => this.handleTemaChange(e)} style={{width:"200px"}}>
+                                    <select name="tema" className="form-control" disabled={true} value={this.state.tema} onChange={(e) => this.handleTemaChange(e)} style={{width:"200px"}}>
                                         <option value="Orgamec">Orgamec</option>
                                         <option value="Fresca">Fresca</option>
                                         <option value="Herbie">Herbie</option>

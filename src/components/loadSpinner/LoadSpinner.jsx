@@ -9,11 +9,13 @@ class LoadSpinner extends Component {
 
     render() {
         return (
-            <div className="text-center" style={{width: this.props.w + "px",height: this.props.h + "px"}}>
-              <div className="spinner-border text-primary" role="status" >
-                <span className="sr-only">Loading...</span>
-              </div>
-                <p className="text-secondary">{this.props.msg}</p>
+            <div className="d-flex justify-content-center align-content-center flex-wrap" style={{width: this.props.w + "px",height: this.props.h + "px"}}>
+                <div className="text-center slide-in-fwd-top">
+                    <div className="spinner-border text-primary" role="status" >
+                        <span className="sr-only">Loading...</span>
+                    </div>
+                    <p className="text-secondary"> {this.props.msg}</p>
+                </div>              
             </div>
         );
     }

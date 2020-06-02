@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DropdownButton, ButtonGroup, Dropdown } from 'react-bootstrap';
+import { DropdownButton, ButtonGroup, Dropdown, DropdownItem } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 import { bindActionCreators } from 'redux';
@@ -9,6 +9,7 @@ import LoginSpinner from '../loadSpinner/LoadSpinner';
 import { LOCAL_STORAGE_VAR } from '../../helpers/globalvar';
 
 import Rotas from '../../helpers/rotas';
+import FormFast from '../../helpers/formfast';
 
 import { updateUser } from '../../actions/userActions';
 import { addAlerta, removeAlerta } from '../../actions/alertaActions';
@@ -21,21 +22,19 @@ class topNavbar extends Component {
         super(props);
 
         this.state = {
-          alerta: {    
-            ativo: false,      
-            tipo: 'danger', //warning, danger
-            msg: 'Nenhum dos campos aqui devem ficar vazios',
-            destacado: 'Atenção usuário!'
-          },
           travar: false,
           menubar: false
         };
         
     }
 
-    componentDidMount = async () => {        
-        const acesso = await ServiceLogin.whoami();
-        this.props.onUpdateUser(acesso);             
+    componentDidMount = async () => {  
+        console.log(this.props.user);
+        if(FormFast.estaVazio(this.props.user)) {
+            console.log('TOP NAVBAR componentDidMount');
+            const acesso = await ServiceLogin.whoami();
+            this.props.onUpdateUser(acesso);             
+        }              
         /*
         this.props.onAddAlerta(
             {id: 1, tipo: 'danger', destaque: 'novo!',msg: 'test'}
@@ -43,9 +42,6 @@ class topNavbar extends Component {
         */            
     }
 
-    getRotas = () => {
-        return Rotas;
-    }
     handleMenuBar = (abrir) => {
         this.setState({menubar: abrir});
     }
@@ -82,8 +78,8 @@ class topNavbar extends Component {
                             variant="primary"
                             style={{zIndex: 3}}
                             title={<i className="fas fa-cogs"></i>}
-                            >                                
-                                <Dropdown.Item eventKey="2" tag="a" href="/configuracoes">Configurações</Dropdown.Item>                                
+                            >                                                                                       
+                                <Link className="dropdown-item" to="/configuracoes">Configurações</Link>
                                 <Dropdown.Item eventKey="3">Perfil</Dropdown.Item>                                
                                 <Dropdown.Divider />
                                 <Dropdown.Item eventKey="4" onClick={this.handleLogOut}>Sair</Dropdown.Item>
@@ -97,8 +93,8 @@ class topNavbar extends Component {
                 <div className={`lay-menu ${ !this.state.menubar ? ('lay-menu-off'): ('') } p-1 bg-dark lay-shadow2`}>
 
                     {
-                        this.props.user == undefined ? (
-                            <LoginSpinner w="376" h="90" msg="Procurando seu acesso..."></LoginSpinner>
+                        FormFast.estaVazio(this.props.user) ? (
+                            <LoginSpinner w="392" h="106" msg="Buscando usuário."></LoginSpinner>
                         ) : (
                             <div className="position-relative p-2">
                                 <button type="button" className="btn btn-primary position-absolute px-3" onClick={(e) => this.handleMenuBar(false)} style={{right:"1rem" ,top:"1rem"}}> <i className="fas fa-caret-left"></i> </button>
@@ -130,7 +126,7 @@ class topNavbar extends Component {
                                 <div className="d-flex flex-column rounded" style={{backgroundColor:"#31373c"}}>
                                     {
                                         item.subItem.map((subItem) =>      
-                                            <Link to={subItem.link} key={subItem.id} className="pl-5 py-2 text-secondary text-left">{subItem.titulo}</Link>                                                                                                                   
+                                            <Link to={subItem.link} key={subItem.id} onClick={(e) => this.handleMenuBar(false)} className="pl-5 py-2 text-secondary text-left">{subItem.titulo}</Link>                                                                                                                   
                                         )
                                     }                                 
                                 </div>
