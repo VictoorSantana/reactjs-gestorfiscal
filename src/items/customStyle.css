@@ -39,6 +39,9 @@
   .lay-off {
     max-height: 42px!important;
   }
+  .lay-cursor-default {
+    cursor: default;
+  }
   .lay-notificacao {
     cursor: default;
     width: 200px;

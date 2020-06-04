@@ -37,5 +37,19 @@ export default {
           return error.response;
         });         
        
+    },
+
+    logout: async () => {
+
+      const localstorage_item = await localStorage.getItem(LOCAL_STORAGE_VAR)            
+      const token = 'Bearer ' + localstorage_item.split('|')[1];
+
+        return await axios.get(API_URL_BASE + '/auth/logout',  { headers: { Authorization: token } } )
+        .then(res => {
+              return res.data;              
+        }).catch(function (error) {
+          return error.response;
+        });  
+
     }
 }

@@ -12,18 +12,15 @@ export default {
                 },
                 {
                     id: 1,
-                    titulo: 'Permissões',
+                    titulo: 'Papeis',
                     subItem: [
-                        {id: 2, titulo: 'Criar usuários', link: '/test'},
-                        {id: 3, titulo: 'Arrumar permissão', link: '/test'}
+                        {id: 2, titulo: 'Contratos', link: '/PapeisContratos'}
                     ]
                 },
                 {
                     id: 2,
                     titulo: 'Perfil',
                     subItem: [
-                        {id: 4, titulo: 'Escalações', link: '/test'},
-                        {id: 5, titulo: 'Gerencias', link: '/test'},
                         {id: 6, titulo: 'Usuário', link: '/user'},
                         {id: 7, titulo: 'Configurações', link: '/configuracoes'}
                     ]

@@ -119,11 +119,9 @@ class RouteLogin extends Component {
                         <input type="password" name="password" required className="form-control" placeholder="Senha" disabled={this.state.travar ? ("true"): ""}></input>
                       </div>                    
                   </div>
-                  <div className="form-group mb-1">
-                    <button type="submit" className="btn btn-primary btn-block" disabled={this.state.travar ? ("true"): ""}>Entrar</button>
-                  </div>
-                  <div className="form-group mb-0 d-none">
-                      <p className="btn btn-link p-0 mb-0">Esqueci a senha...</p>
+                  <div className="form-group mb-1 d-flex justify-content-start">
+                    <button type="button" className="btn btn-secondary w-50 mr-1" onClick={(e) => this.props.history.push('/cadastro')}>Cadastrar</button>
+                    <button type="submit" className="btn btn-primary w-50" disabled={this.state.travar ? ("true"): ""}>Entrar</button>                    
                   </div>
                 </form>
               )

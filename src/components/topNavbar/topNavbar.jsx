@@ -46,7 +46,12 @@ class topNavbar extends Component {
         this.setState({menubar: abrir});
     }
 
-    handleLogOut = () => {
+    handleFecharAlerta = (item) => {        
+        this.props.onRemoveAlerta(item.id)
+    }
+
+    handleLogOut = async () => {
+        const result = await ServiceLogin.logout();        
         localStorage.removeItem(LOCAL_STORAGE_VAR);
         window.location.reload();        
     }
@@ -142,7 +147,7 @@ class topNavbar extends Component {
                             this.props.alerta.map((item) =>
                             <div key={item.id} className={`alert alert-${item.tipo} alert-dismissible fade show shadow slide-in-right`} role="alert">
                                 <strong>{item.destaque}</strong> {item.msg}
-                                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={(e) => this.props.onRemoveAlerta(item)}>
+                                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={(e) => this.handleFecharAlerta(item)}>
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>

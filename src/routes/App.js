@@ -4,8 +4,10 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 /* Rotas */
 import RouteLogin from './RouteLogin';
+import RouteCadastro from './RouteCadastro';
 import RouteUser from './RouteUser'
 import RouteConfiguracao from './RouteConfiguracao';
+import RoutePapeisContratos from './RoutePapeisContratos';
 
 /*****/
 
@@ -31,7 +33,10 @@ const Routes = () => (
   <BrowserRouter>
         <Switch>
             <Route exact path="/" component={(props) => <RouteLogin  {...props}></RouteLogin>}></Route>
+            <Route exact path="/cadastro" component={(props) => <RouteCadastro  {...props}></RouteCadastro>}></Route>
+
             <PrivateRoute path="/user" component={(props) => <RouteUser {...props}></RouteUser>}></PrivateRoute>
+            <PrivateRoute path="/PapeisContratos" component={(props) => <RoutePapeisContratos {...props}></RoutePapeisContratos>}></PrivateRoute>
             <PrivateRoute path="/configuracoes" component={(props) => <RouteConfiguracao {...props}></RouteConfiguracao>}></PrivateRoute>
         </Switch>
   </BrowserRouter>

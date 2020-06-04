@@ -11,8 +11,8 @@ export default function alertaState(state = initialUserState, action)
         case ADD_ALERTA: 
             return [...state, action.payload.alerta]
         case REMOVE_ALERTA:
-            let newArr = [...state.filter((elem, idx) => { // [1,2,3,5]
-                return idx !== action.payload.id
+            let newArr = [...state.filter((elem, idx) => { // [1,2,3,5]  
+                return elem.id !== action.payload
               })];
             return newArr;
         default:
