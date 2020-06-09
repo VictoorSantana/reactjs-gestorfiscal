@@ -28,6 +28,15 @@ export default {
                     msg: 'Parece que tudo ocorreu bem no seu pedido.'
                 }
                 break;
+            case 204:
+                return {
+                    id: Math.round(Math.random(2) * 1000),
+                    ativo: true,    
+                    tipo: 'success', 
+                    destaque: 'Registro deletado!',
+                    msg: 'O registro selecionado foi removido com sucesso da base.'
+                }
+                break;
             case 400:
                 return {
                     id: Math.round(Math.random(2) * 1000), 
@@ -92,6 +101,23 @@ export default {
                     msg: 'A confirmação da senha não está igual a qual você digitou primeiramente.',
                     destaque: 'Problema na senha!'
                 }
+            case 4:
+                return {  
+                    id: Math.round(Math.random(2) * 1000),   
+                    ativo: true,      
+                    tipo: 'danger', //warning, danger
+                    msg: 'Todos os campos abaixo devem ser preenchidos e válidos. Tente novamente.',
+                    destaque: 'Atenção usuário!'
+                }
+                break;
+            case 5:
+                return {  
+                    id: Math.round(Math.random(2) * 1000),   
+                    ativo: true,      
+                    tipo: 'danger', //warning, danger
+                    msg: 'O e-mail usuário ou senha está incorreto. Tente novamente.',
+                    destaque: 'Credenciais erradas!'
+                }
                 break;
             default: 
                 break;
@@ -113,6 +139,20 @@ export default {
             msg,
             destaque: 'Erro na requisição!'
         }
+    },
+
+    naoGenerico: (data, tipo) => {        
+        let resultado = JSON.stringify(data);
+
+        resultado = resultado.replace(/[^a-zA-Z záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ:,]/g, '');                
+
+        return {
+            id: Math.round(Math.random(2) * 1000),    
+            ativo: true,      
+            tipo: tipo, //warning, danger
+            msg: resultado,
+            destaque: 'Atenção usuário!'
+        };
     }
 
     

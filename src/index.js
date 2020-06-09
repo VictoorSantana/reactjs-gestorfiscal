@@ -24,7 +24,7 @@ const allReducers = combineReducers({
 const store = createStore(allReducers, {
   user: {},
   alerta: [
-    {id: 0, tipo: 'success', destaque: 'Bem Vindo!',msg: 'Nossa ferramenta Gestor Fiscal te deseja um bom serviço.'}
+    {id: 0, tipo: 'success', destaque: 'Bem-Vindo!',msg: 'Nossa ferramenta Gestor Fiscal te deseja um bom serviço.'}
   ]
 },
 window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

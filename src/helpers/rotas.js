@@ -3,14 +3,6 @@ export default {
      
     Rotas:  [
                 {
-                    id: 0,
-                    titulo: 'Dashboard',
-                    subItem: [
-                        {id: 0, titulo: 'Vendas', link: '/test'},
-                        {id: 1, titulo: 'Compras', link: '/test'}
-                    ]
-                },
-                {
                     id: 1,
                     titulo: 'Papeis',
                     subItem: [

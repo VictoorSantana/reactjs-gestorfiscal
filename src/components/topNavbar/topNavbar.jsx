@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { DropdownButton, ButtonGroup, Dropdown, DropdownItem } from 'react-bootstrap';
+import { DropdownButton, ButtonGroup, Dropdown } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 
 import { bindActionCreators } from 'redux';
@@ -28,12 +28,10 @@ class topNavbar extends Component {
         
     }
 
-    componentDidMount = async () => {  
-        //console.log(this.props.user);
-        if(FormFast.estaVazio(this.props.user)) {
-            //console.log('TOP NAVBAR componentDidMount');
-            const acesso = await ServiceLogin.whoami();
-            this.props.onUpdateUser(acesso);             
+    componentDidMount = async () => {          
+        if(FormFast.estaVazio(this.props.user)) {            
+            const acesso = await ServiceLogin.whoami();               
+            this.props.onUpdateUser(acesso.data);             
         }              
         /*
         this.props.onAddAlerta(
@@ -67,11 +65,11 @@ class topNavbar extends Component {
     render() {
         return (
             <React.Fragment>
-                <div className="w-100 bg-primary p-2 position-fixed" style={{"left": 0, "top":0, "zIndex":3}}>
+                <div className="w-100 bg-dark p-2 position-fixed" style={{"left": 0, "top":0, "zIndex":3}}>
                     <div className="container">
                         <div className="d-flex justify-content-between">
                             <div className="d-flex align-items-end">
-                                <button type="button" className="btn btn-primary" onClick={(e) => this.handleMenuBar(true)}> <i className="fas fa-bars"></i> </button>
+                                <button type="button" className="btn btn-dark" onClick={(e) => this.handleMenuBar(true)}> <i className="fas fa-bars"></i> </button>
                                 <h4 className="ml-3 h5 text-white"> { this.props.titulo } </h4>
                             </div>                            
 
@@ -80,7 +78,7 @@ class topNavbar extends Component {
                             as={ButtonGroup}
                             id={'navbar-dropdown'}
                             drop={'left'}
-                            variant="primary"
+                            variant="dark"
                             style={{zIndex: 3}}
                             title={<i className="fas fa-cogs"></i>}
                             >                                                                                       
@@ -95,7 +93,7 @@ class topNavbar extends Component {
                     </div>
                 </div>
 
-                <div className={`lay-menu ${ !this.state.menubar ? ('lay-menu-off'): ('') } p-1 bg-dark lay-shadow2`}>
+                <div className={`lay-menu ${ !this.state.menubar ? ('lay-menu-off'): ('lay-shadow2') } p-1 bg-dark`}>
 
                     {
                         FormFast.estaVazio(this.props.user) ? (
