@@ -8,6 +8,7 @@ import RouteCadastro from './RouteCadastro';
 import RouteUser from './RouteUser'
 import RouteConfiguracao from './RouteConfiguracao';
 import RoutePapeisContratos from './RoutePapeisContratos';
+import RouteUsuarios from './RouteUsuarios';
 
 /*****/
 
@@ -38,6 +39,7 @@ const Routes = () => (
             <PrivateRoute path="/user" component={(props) => <RouteUser {...props}></RouteUser>}></PrivateRoute>
             <PrivateRoute path="/PapeisContratos" component={(props) => <RoutePapeisContratos {...props}></RoutePapeisContratos>}></PrivateRoute>
             <PrivateRoute path="/configuracoes" component={(props) => <RouteConfiguracao {...props}></RouteConfiguracao>}></PrivateRoute>
+            <PrivateRoute path="/usuarios" component={(props) => <RouteUsuarios {...props}></RouteUsuarios>}></PrivateRoute>
         </Switch>
   </BrowserRouter>
 );

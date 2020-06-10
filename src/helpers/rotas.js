@@ -16,6 +16,13 @@ export default {
                         {id: 6, titulo: 'Usuário', link: '/user'},
                         {id: 7, titulo: 'Configurações', link: '/configuracoes'}
                     ]
+                },
+                {
+                    id: 3,
+                    titulo: 'Usuários',
+                    subItem: [
+                        {id: 8, titulo: 'Cadastrados', link: '/usuarios'}
+                    ]
                 }
             ]        
 }

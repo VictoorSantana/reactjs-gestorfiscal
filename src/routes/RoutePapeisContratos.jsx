@@ -14,8 +14,9 @@ import ServicePapeis from '../services/service_papeis';
 /* Services */
 
 /* Helpers */
-import FormFast from '../helpers/formfast';
+import Filtrar from '../helpers/filtrar';
 import Mensagens from '../helpers/mensagens';
+import Mascara from '../helpers/mascara';
 /* Helpers */
 
 /* Redux */
@@ -34,19 +35,17 @@ class RoutePapeisContratos extends Component {
             travarFiltro: false,
             papeisIndex: [],    
             metaPaginas: {},    
+            modoEdicao: false,
     
             id: 0,
             name: '',
             display_name: '',
             description: ''        
         };
-    }
-
-    
-    
+    }        
 
     handleTrocarTab = (flag) => {
-        this.setState({tabAberta: flag});
+        this.setState({tabAberta: flag}); //visual ou editar
     }
 
     componentDidMount = async () => {
@@ -55,33 +54,63 @@ class RoutePapeisContratos extends Component {
 
     getPapeisIndex = async (page) => {             
         const result = await ServicePapeis.index(page);        
-        if(result.status == 200) {
+        if(Mensagens.ok(result.status)) {
             this.setState({papeisIndex: result.data.data, metaPaginas: result.data.meta.pagination });            
         } else {            
             this.props.onAddAlerta(Mensagens.tratar(result.status));
         }        
     }
 
-     handleEditarPapel = (id) => {
+     handleEditarPapel = async (id) => {
+        const resposta = await ServicePapeis.show(id);
+        if(Mensagens.ok(resposta.status)) {            
+            this.setState({
+                id: resposta.data.data.id,
+                name: resposta.data.data.name,
+                display_name: resposta.data.data.display_name,
+                description: resposta.data.data.description
+            });
+        this.setState({modoEdicao: true});
+        this.handleTrocarTab('editar');
+        } else {
+            this.props.onAddAlerta(Mensagens.tratar(resposta.status));
+        }        
+     }
+     
+     handleDeletar = async () => {
         
-     }  
+        const resposta = await ServicePapeis.delete(this.state.id);
+        if(resposta.status == 204) {          
+            this.getPapeisIndex(this.state.metaPaginas.current_page);              
+            this.setState({modoEdicao: false});
+            this.handleReset();
+        }  
+        this.props.onAddAlerta(Mensagens.tratar(resposta.status));
+
+     }
 
      handleSubmitPapeis = async (e) => {
         e.preventDefault(); 
 
         const data = {
-            name: this.state.name,
-            display_name: this.state.display_name,
-            description: this.state.description,
+            name: Filtrar.letras(this.state.name),
+            display_name: Filtrar.letras(this.state.display_name),
+            description: Filtrar.letras(this.state.description),
         };
+                
+        let result = {};
         
-        const result = await ServicePapeis.store(data);        
+        if(this.state.modoEdicao) {
+            result = await ServicePapeis.put(data, this.state.id);        
+        } else {
+            result = await ServicePapeis.store(data);        
+        }
         
-        if(result.status == 200) {
-            this.props.onAddAlerta(Mensagens.interno(1));
-        } else {            
-            this.props.onAddAlerta(Mensagens.tratar(result.status));
-        }                
+        if(Mensagens.ok(result.status)) {
+            this.getPapeisIndex(this.state.metaPaginas.current_page);
+            this.handleReset();
+        }           
+        this.props.onAddAlerta(Mensagens.tratar(result.status));
      }
 
      changeHandler = e => {
@@ -96,9 +125,20 @@ class RoutePapeisContratos extends Component {
         }        
      }
 
+     handleReset = () => {        
+        this.handleTrocarTab('visual');
+        this.setState({
+            id: 0,
+            name: '',
+            display_name: '',
+            description: '',
+            modoEdicao: false
+        });
+     }
+
      renderPaginas() {
         let result = [];                
-        for(let i = 1; i <= 2; i++) {            
+        for(let i = 1; i <= this.state.metaPaginas.total_pages; i++) {            
             result.push(
                 i ==  this.state.metaPaginas.current_page ? (
                     <li className="page-item active" key={i} onClick={(e) => this.getPapeisIndex(i)}>
@@ -137,7 +177,7 @@ class RoutePapeisContratos extends Component {
                                     <div>  
                                         {         
                                                   
-                                            !FormFast.estaVazio(this.state.papeisIndex) ? (
+                                            !Filtrar.estaVazio(this.state.papeisIndex) ? (
                                                 this.state.papeisIndex.map((data) =>
 
                                                 <div key={data.id} onClick={(e) => this.handleEditarPapel(data.id)} className="bg-white my-1 py-1 px-3 rounded border-left border-bottom d-flex justify-content-between">
@@ -156,7 +196,7 @@ class RoutePapeisContratos extends Component {
 
                                         <hr/>
                                         {
-                                            !FormFast.estaVazio(this.state.metaPaginas) ? (
+                                            !Filtrar.estaVazio(this.state.metaPaginas) ? (
                                                 <nav aria-label="Page navigation example">
                                                     <ul className="pagination">
                                                         <li className={`page-item ${ !this.state.metaPaginas.links.previous ? ('disabled'): ('')} `} onClick={(e) => !this.state.metaPaginas.links.previous ? (''): (this.handlePaginas(1))}>
@@ -192,25 +232,54 @@ class RoutePapeisContratos extends Component {
                                         <div className="col-md-3">
                                             <div className="form-group">
                                                 <label htmlFor="name" className="d-block">Nome</label>
-                                                <input type="text" name="name" value={name} onChange={this.changeHandler} required className="form-control"/>
+                                                <input  type="text" 
+                                                        name="name" 
+                                                        minLength="3" 
+                                                        value={name} 
+                                                        onChange={this.changeHandler} 
+                                                        required 
+                                                        className="form-control"
+                                                        onKeyUp={(e) => Mascara.letras(e)}
+                                                        autoComplete="off"/>
                                             </div>                                            
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group">
                                                 <label htmlFor="display_name" className="d-block">Apelido</label>
-                                                <input type="text" name="display_name" value={display_name} onChange={this.changeHandler} required className="form-control"/>
+                                                <input  type="text" 
+                                                        name="display_name" 
+                                                        minLength="3" 
+                                                        value={display_name} 
+                                                        onChange={this.changeHandler} 
+                                                        required 
+                                                        className="form-control"
+                                                        onKeyUp={(e) => Mascara.letras(e)}
+                                                        autoComplete="off"/>
                                             </div>                                            
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group">
                                                 <label htmlFor="description" className="d-block">Descrição</label>
-                                                <input type="text" name="description" value={description} onChange={this.changeHandler} required className="form-control"/>
+                                                <input  type="text" 
+                                                        name="description" 
+                                                        minLength="3" 
+                                                        value={description} 
+                                                        onChange={this.changeHandler} 
+                                                        required 
+                                                        className="form-control"
+                                                        onKeyUp={(e) => Mascara.letras(e)}
+                                                        autoComplete="off"/>
                                             </div>
                                         </div>
                                         <div className="col-md-3">
                                             <div className="form-group">
-                                                <button type="button" className="btn btn-secondary mr-1">Cancelar</button>
-                                                <button type="submit" className="btn btn-primary">Adicionar</button>
+                                                <button type="button" className="btn btn-secondary mr-1" onClick={(e) => this.handleReset()}>Cancelar</button>
+                                                <button type="submit" className="btn btn-primary">{ this.state.modoEdicao ? ('Salvar') : ('Adicionar')}</button>
+                                                {
+                                                    this.state.modoEdicao ? (
+                                                        <button type="button" className="btn btn-danger ml-1" onClick={(e) => this.handleDeletar()} >Deletar</button>
+                                                    ): ('')
+                                                }
                                             </div>                                            
                                         </div>
                                     </div>

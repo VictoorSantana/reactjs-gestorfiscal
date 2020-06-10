@@ -28,7 +28,7 @@
   .lay-menu-off {
     left: -100%;
   }
-  .lay-reticencias{
+  .lay-reticencias {
       text-overflow: ellipsis;
       white-space: nowrap;
       overflow: hidden;

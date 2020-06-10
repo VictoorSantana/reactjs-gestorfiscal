@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default {
         
-    registrer: async (data) => {
+    register: async (data) => {
         return axios.post(API_URL_BASE + '/auth/register', data)
         .then(res => {          
           return res;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import TopNavbar from '../components/topNavbar/topNavbar'
+import TopNavbar from '../components/topNavbar/topNavbar';
 
 class RouteConfiguracao extends Component {
 

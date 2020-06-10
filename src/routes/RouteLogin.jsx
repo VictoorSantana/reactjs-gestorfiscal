@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import FormFast from '../helpers/formfast';
 
+/*HELPERS */
+import Mensagens from '../helpers/mensagens';
+import { LOCAL_STORAGE_VAR } from '../helpers/globalvar';
+/* */
+
+/* COMPONENTES */
 import LoginSpinner from '../components/loadSpinner/LoadSpinner';
 import ServiceLogin from '../services/service_login';
-import { updateUser } from '../actions/userActions';
+/* */
 
+/* REDUX */
+import { updateUser } from '../actions/userActions';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+/* */
 
-import { LOCAL_STORAGE_VAR } from '../helpers/globalvar';
-
+/* SCHEMA VALIDACAO */
 import schemaCredenciais from '../schemas/schemaCredenciais';
 
 class RouteLogin extends Component {
@@ -18,75 +25,77 @@ class RouteLogin extends Component {
     constructor(props) {
       super(props);
       this.state = {
+
+        email: '',
+        password: '',
+
         alerta: {    
           ativo: false,      
-          tipo: 'danger', //warning, danger
-          msg: 'Nenhum dos campos aqui devem ficar vazios',
-          destacado: 'Atenção usuário!'
+          tipo: '', //warning, danger
+          msg: '',
+          destaque: ''
         },
         travar: false
       };
-
-      this.onUpdateUser = this.onUpdateUser.bind(this);
+      
     }
 
     handleAlertFechar = () => {
       this.setState({alerta: {    
         ativo: false,      
       }});
+    }   
+
+    handleTravar = (flag) => {
+      this.setState({ travar: flag });
     }
 
-    onUpdateUser(user) {
-      this.props.onUpdateUser(user);
+    handleChange = e => {
+        this.setState({[e.target.name]: e.target.value });
+    }
+
+    setUsuario = (usuario, token) => {      
+      this.props.onUpdateUser(usuario);
+      localStorage.setItem(LOCAL_STORAGE_VAR, token);
+      this.props.history.push('/user');
+    }
+
+    handleRetorno = async (status) => {
+      console.log(Mensagens.interno(status));
+      this.setState({alerta: Mensagens.interno(status)});
     }
 
     handleSubmit= async e => {
         e.preventDefault();
+                
+        this.handleTravar(true);
 
-        this.setState({ travar: true });
-
-        const data = FormFast.getObject(e.target);      
+        const data = {
+          email: this.state.email,
+          password: this.state.password
+        };              
         
         schemaCredenciais.isValid(data)
-        .then( async valid => {
-            if(valid) {
-              const result = await ServiceLogin.postLogin(data);
-                
-                switch(result.status) {
-                  case 401: //Senha errada
-                    this.setState({ travar: false });
-                    this.setState({alerta: {    
-                      ativo: true,      
-                      tipo: 'warning', //warning, danger
-                      msg: result.data.message,
-                      destacado: 'Barbaridade!'
-                    }});
-                    break;
-                  case 200:              
-                    localStorage.setItem(LOCAL_STORAGE_VAR, result.data.access_token);
-                    this.onUpdateUser(result.data.user);                    
-                    this.props.history.push('/user');
-                    break;
+        .then(async valid => {
 
-                  default:
-                    this.setState({alerta: {    
-                      ativo: true,      
-                      tipo: 'danger', //warning, danger
-                      msg: 'Parece que o servidor está indisponível. Atualize a página e tente novamente.',
-                      destacado: 'Meu Deus!'
-                    }});
-                    break;
-                } 
+            if(valid) {
+              const resposta = await ServiceLogin.postLogin(data);
+
+              if(Mensagens.ok(resposta.status)) {
+                const usuario = resposta.data.user.data;
+                const token = resposta.data.access_token;
+
+                this.setUsuario(usuario, token);                
+              } else {                
+                this.handleRetorno(5);
+                this.handleTravar(false);
+              }                
+                
             } else {
-              this.setState({alerta: {    
-                ativo: true,      
-                tipo: 'danger', //warning, danger
-                msg: 'Todos os campos abaixo devem ser preenchidos e válidos. Tente novamente.',
-                destacado: 'Atenção usuário!'
-              }});
-              this.setState({ travar: false });
-              
-            }           
+              this.handleRetorno(4);
+              this.handleTravar(false);          
+            }
+
         });                                
     }
 
@@ -102,13 +111,21 @@ class RouteLogin extends Component {
               this.state.travar ? (
                 <LoginSpinner w="318" h="146" msg="Procurando seu acesso..."></LoginSpinner>
               ): (
+
                 <form onSubmit={this.handleSubmit}>
                   <div className="form-group">
+
                     <div className="input-group mb-2">
                         <div className="input-group-prepend">
                           <div className="input-group-text"> <i className="fas fa-at"></i> </div>
                         </div>
-                        <input type="text" name="email" required className="form-control" placeholder="Email" disabled={this.state.travar ? ("true"): ""}></input>
+                        <input  type="text"
+                                name="email" 
+                                required 
+                                onChange={this.handleChange} 
+                                className="form-control" 
+                                placeholder="Entre com seu e-mail." 
+                                disabled={this.state.travar ? ("true"): ""}></input>
                     </div>                    
                   </div>
                   <div className="form-group">
@@ -116,9 +133,17 @@ class RouteLogin extends Component {
                         <div className="input-group-prepend">
                           <div className="input-group-text"> <i className="fas fa-key"></i> </div>
                         </div>
-                        <input type="password" name="password" required className="form-control" placeholder="Senha" disabled={this.state.travar ? ("true"): ""}></input>
+                        <input  type="password"
+                                name="password" 
+                                required 
+                                onChange={this.handleChange} 
+                                className="form-control" 
+                                placeholder="Entre com sua senha." 
+                                disabled={this.state.travar ? ("true"): ""}></input>
                       </div>                    
                   </div>
+
+
                   <div className="form-group mb-1 d-flex justify-content-start">
                     <button type="button" className="btn btn-secondary w-50 mr-1" onClick={(e) => this.props.history.push('/cadastro')}>Cadastrar</button>
                     <button type="submit" className="btn btn-primary w-50" disabled={this.state.travar ? ("true"): ""}>Entrar</button>                    
@@ -133,7 +158,7 @@ class RouteLogin extends Component {
           {this.state.alerta.ativo ? (
             <div className="lay-log overflow-hidden">
               <div className={`alert alert-${this.state.alerta.tipo} alert-dismissible fade show slide-in-right`} role="alert">
-                <strong>{this.state.alerta.destacado}</strong> {this.state.alerta.msg}
+                <strong>{this.state.alerta.destaque}</strong> {this.state.alerta.msg}
                 <button type="button" className="close" aria-label="Close" onClick={e => this.handleAlertFechar()}>
                   <span aria-hidden="true">&times;</span>
                 </button>
